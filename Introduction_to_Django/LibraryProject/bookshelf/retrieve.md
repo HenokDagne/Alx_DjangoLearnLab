@@ -8,5 +8,5 @@ print(retrieved_book.title, retrieved_book.author, retrieved_book.publication_ye
 
 **Output:**
 ```
-Django Basics John Doe 2024
+1984 George Orwell 1949
 ```
