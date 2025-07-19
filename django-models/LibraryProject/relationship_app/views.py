@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from relationship_app.models import Author, Book, Library, Librarian
+from .models import Author, Book, Library, Librarian
 
 # Create your views here.
 
