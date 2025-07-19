@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .models import Author, Book, Library, Librarian
+from django.views.generic.detail import DetailView
 
 # Create your views here.
 
