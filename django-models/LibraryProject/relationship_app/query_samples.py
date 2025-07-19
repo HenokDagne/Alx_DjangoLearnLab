@@ -1,39 +1,32 @@
+import os
+import django
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'LibraryProject.settings')
+django.setup()
+
 from relationship_app.models import Author, Book, Library, Librarian
 
 # Query all books by a specific author
-def get_books_by_author(author_name):
-    try:
-        author = Author.objects.get(name=author_name)
-        books = author.books.all()
-        return books
-    except Author.DoesNotExist:
-        return []
+def books_by_author(author_name):
+    author = Author.objects.filter(name=author_name).first()
+    if author:
+        return list(author.books.all())
+    return []
 
 # List all books in a library
-def get_books_in_library(library_name):
-    try:
-        library = Library.objects.get(name=library_name)
-        books = library.books.all()
-        return books
-    except Library.DoesNotExist:
-        return []
+def books_in_library(library_name):
+    library = Library.objects.filter(name=library_name).first()
+    if library:
+        return list(library.books.all())
+    return []
 
 # Retrieve the librarian for a library
-def get_librarian_for_library(library_name):
-    try:
-        library = Library.objects.get(name=library_name)
-        librarian = library.librarians
-        return librarian
-    except Library.DoesNotExist:
-        return None
+def librarian_for_library(library_name):
+    library = Library.objects.filter(name=library_name).first()
+    if library and hasattr(library, 'librarian'):
+        return library.librarian
+    return None
 
-            
-
-
-    
-    
-    
-
-
-
-     
+# Example usage (uncomment to test)
+# print(books_by_author('Author Name'))
+# print(books_in_library('Library Name'))
+# print(librarian_for_library('Library Name'))
