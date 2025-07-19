@@ -38,16 +38,16 @@ def register(request):
         form = UserCreationForm()
     return render(request, 'relationship_app/register.html', {'form': form})
 
+@user_passes_test(lambda u: hasattr(u, 'profile') and u.profile.role == 'admin')
 def admin_view(request):
     return render(request, 'relationship_app/admin_view.html')
-admin_view = user_passes_test(lambda u: hasattr(u, 'profile') and u.profile.role == 'admin')(admin_view)
 
+@user_passes_test(lambda u: hasattr(u, 'profile') and u.profile.role == 'librarian')
 def librarian_view(request):
     return render(request, 'relationship_app/librarian_view.html')
-librarian_view = user_passes_test(lambda u: hasattr(u, 'profile') and u.profile.role == 'librarian')(librarian_view)
 
+@user_passes_test(lambda u: hasattr(u, 'profile') and u.profile.role == 'member')
 def member_view(request):
     return render(request, 'relationship_app/member_view.html')
-member_view = user_passes_test(lambda u: hasattr(u, 'profile') and u.profile.role == 'member')(member_view)
 
 
