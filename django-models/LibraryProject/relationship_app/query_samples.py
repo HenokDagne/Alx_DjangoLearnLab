@@ -25,8 +25,8 @@ def books_in_library(library_name):
 def librarian_for_library(library_name):
     try:
         library = Library.objects.get(name=library_name)
-        return getattr(library, 'librarian', None)
-    except Library.DoesNotExist:
+        return Librarian.objects.get(library=library)
+    except (Library.DoesNotExist, Librarian.DoesNotExist):
         return None
 
 # Example usage (uncomment to test)
