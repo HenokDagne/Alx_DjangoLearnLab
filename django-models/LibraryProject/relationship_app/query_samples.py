@@ -14,17 +14,19 @@ def books_by_author(author_name):
 
 # List all books in a library
 def books_in_library(library_name):
-    library = Library.objects.filter(name=library_name).first()
-    if library:
+    try:
+        library = Library.objects.get(name=library_name)
         return list(library.books.all())
-    return []
+    except Library.DoesNotExist:
+        return []
 
 # Retrieve the librarian for a library
 def librarian_for_library(library_name):
-    library = Library.objects.filter(name=library_name).first()
-    if library and hasattr(library, 'librarian'):
-        return library.librarian
-    return None
+    try:
+        library = Library.objects.get(name=library_name)
+        return getattr(library, 'librarian', None)
+    except Library.DoesNotExist:
+        return None
 
 # Example usage (uncomment to test)
 # print(books_by_author('Author Name'))
