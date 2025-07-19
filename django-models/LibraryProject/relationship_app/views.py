@@ -7,6 +7,7 @@ from django.contrib.auth import views as auth_views
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import redirect
 from django.contrib.auth import login
+from django.contrib.auth.decorators import user_passes_test
 
 
 def list_books(request):
@@ -36,5 +37,17 @@ def register(request):
     else:
         form = UserCreationForm()
     return render(request, 'relationship_app/register.html', {'form': form})
+
+def admin_view(request):
+    return render(request, 'relationship_app/admin_view.html')
+admin_view = user_passes_test(lambda u: hasattr(u, 'profile') and u.profile.role == 'admin')(admin_view)
+
+def librarian_view(request):
+    return render(request, 'relationship_app/librarian_view.html')
+librarian_view = user_passes_test(lambda u: hasattr(u, 'profile') and u.profile.role == 'librarian')(librarian_view)
+
+def member_view(request):
+    return render(request, 'relationship_app/member_view.html')
+member_view = user_passes_test(lambda u: hasattr(u, 'profile') and u.profile.role == 'member')(member_view)
 
 
