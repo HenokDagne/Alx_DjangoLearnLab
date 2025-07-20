@@ -7,8 +7,8 @@ from django.contrib.auth import views as auth_views
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import redirect
 from django.contrib.auth import login
-from django.contrib.auth.decorators import user_passes_test, permission_required
-
+from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import permission_required
 
 def list_books(request):
     books = Book.objects.all()
