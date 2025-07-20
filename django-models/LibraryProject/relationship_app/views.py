@@ -74,5 +74,5 @@ def delete_book(request, book_id):
         except Book.DoesNotExist:
             return render(request, 'relationship_app/error.html', {'message': 'Book not found'})
     return render(request, 'relationship_app/delete_book.html', {'book_id': book_id})
-            
-    
+
+
