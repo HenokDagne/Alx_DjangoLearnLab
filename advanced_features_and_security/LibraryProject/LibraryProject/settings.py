@@ -1,3 +1,5 @@
+# If behind a proxy/load balancer, ensure Django detects HTTPS correctly
+
 """
 Django settings for LibraryProject project.
 
@@ -26,6 +28,7 @@ DEBUG = False  # SECURITY WARNING: Set to False in production for security
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']  # Update with your production domain(s)
 
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # Security best practices
 # Enforce HTTPS and secure cookies
 SECURE_SSL_REDIRECT = True  # Redirect all HTTP requests to HTTPS
