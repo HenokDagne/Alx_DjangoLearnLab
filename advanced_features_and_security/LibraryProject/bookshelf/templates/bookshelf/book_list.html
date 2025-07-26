@@ -1,0 +1,16 @@
+{# Secure book list template with CSRF token for forms #}
+{% extends 'base.html' %}
+{% block content %}
+  <h1>Book List</h1>
+  <ul>
+    {% for book in books %}
+      <li>{{ book.title|escape }} by {{ book.author|escape }}</li>
+    {% endfor %}
+  </ul>
+  {# Example form with CSRF token #}
+  <form method="post">
+    {% csrf_token %}
+    <!-- form fields here -->
+    <button type="submit">Submit</button>
+  </form>
+{% endblock %}
