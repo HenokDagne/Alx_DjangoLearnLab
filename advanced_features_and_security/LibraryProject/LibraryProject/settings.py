@@ -25,12 +25,20 @@ SECRET_KEY = 'django-insecure--=o2w7tqcopv$0yagiscx&h3)*u!ii66$kqv-3p0n81e^r+gry
 DEBUG = False  # SECURITY WARNING: Set to False in production for security
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']  # Update with your production domain(s)
+
 # Security best practices
-SECURE_BROWSER_XSS_FILTER = True
-X_FRAME_OPTIONS = 'DENY'
-SECURE_CONTENT_TYPE_NOSNIFF = True
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
+# Enforce HTTPS and secure cookies
+SECURE_SSL_REDIRECT = True  # Redirect all HTTP requests to HTTPS
+SECURE_HSTS_SECONDS = 31536000  # Instruct browsers to use HTTPS for one year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Apply HSTS to all subdomains
+SECURE_HSTS_PRELOAD = True  # Allow site to be included in browser preload lists
+SESSION_COOKIE_SECURE = True  # Session cookies only sent over HTTPS
+CSRF_COOKIE_SECURE = True  # CSRF cookies only sent over HTTPS
+
+# Secure headers
+SECURE_BROWSER_XSS_FILTER = True  # Enable browser XSS filter
+X_FRAME_OPTIONS = 'DENY'  # Prevent clickjacking by denying framing
+SECURE_CONTENT_TYPE_NOSNIFF = True  # Prevent MIME type sniffing
 
 
 # Application definition
