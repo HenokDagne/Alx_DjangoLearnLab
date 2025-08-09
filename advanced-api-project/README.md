@@ -2,13 +2,34 @@
 
 This project uses Django REST Framework generic views and mixins to efficiently handle CRUD operations for the Book model. Below is an overview of each view and its configuration:
 
-## Views Overview
 
-### BookListView
-- **Purpose:** List all books and allow creation of new books.
-- **Class:** `ListCreateAPIView`
-- **Permissions:** No authentication required for listing; creation requires authentication if `permission_classes` is set.
-- **Filtering/Search:** Not enabled by default, but can be added.
+## Filtering, Searching, and Ordering in BookListView
+
+The `BookListView` uses Django REST Framework's built-in features to provide flexible querying:
+
+- **Filtering:**
+	- Users can filter books by `title`, `author`, and `publication_year` using query parameters.
+	- Example: `/api/books/?title=SomeTitle&author=1&publication_year=2020`
+
+- **Searching:**
+	- Users can search for books by `title` or author's name using the `search` query parameter.
+	- Example: `/api/books/?search=SomeTitle`
+
+- **Ordering:**
+	- Users can order results by `title`, `publication_year`, `author`, or `id` using the `ordering` query parameter.
+	- Example: `/api/books/?ordering=title` or `/api/books/?ordering=-publication_year`
+
+These features are enabled in `BookListView` using the following configuration:
+
+```python
+filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+filterset_fields = ['title', 'author', 'publication_year']
+search_fields = ['title', 'author__name']
+ordering_fields = ['title', 'publication_year', 'author', 'id']
+ordering = ['title']
+```
+
+See code comments in `api/views.py` for further details and usage examples.
 
 ### BookDetailView
 - **Purpose:** Retrieve details of a single book by primary key (`pk`).

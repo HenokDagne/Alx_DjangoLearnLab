@@ -5,20 +5,26 @@ from .models import Book
 from .serializers import BookSerializer
 
 class BookListView(generics.ListCreateAPIView):
-    """
-    BookListView
-    - Handles listing all books and creating new books.
-    - Uses ListCreateAPIView for GET (list) and POST (create).
-    - No authentication required for listing; creation may require authentication if permission_classes set.
-    """
-    queryset = Book.objects.all()
-    serializer_class = BookSerializer
-    # Enable filtering by title, author, and publication_year
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['title', 'author', 'publication_year']
-    search_fields = ['title', 'author__name']
-    ordering_fields = ['title', 'publication_year', 'author', 'id']  # Allow ordering by these fields
-    ordering = ['title']  # Default ordering by title
+        """
+        BookListView
+        - Handles listing all books and creating new books.
+        - Uses ListCreateAPIView for GET (list) and POST (create).
+        - Filtering: Users can filter by title, author, and publication_year using query parameters.
+            Example: /api/books/?title=SomeTitle&author=1&publication_year=2020
+        - Searching: Users can search by title and author's name using the 'search' query parameter.
+            Example: /api/books/?search=SomeTitle
+        - Ordering: Users can order results by title, publication_year, author, or id using the 'ordering' query parameter.
+            Example: /api/books/?ordering=title or /api/books/?ordering=-publication_year
+        - No authentication required for listing; creation may require authentication if permission_classes set.
+        """
+        queryset = Book.objects.all()
+        serializer_class = BookSerializer
+        # Enable filtering by title, author, and publication_year
+        filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+        filterset_fields = ['title', 'author', 'publication_year']
+        search_fields = ['title', 'author__name']
+        ordering_fields = ['title', 'publication_year', 'author', 'id']  # Allow ordering by these fields
+        ordering = ['title']  # Default ordering by title
 
 class BookDetailView(generics.RetrieveAPIView):
     """
