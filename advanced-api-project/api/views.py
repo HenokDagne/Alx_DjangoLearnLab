@@ -1,21 +1,36 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated, filters
-from rest_framework import generics
+from rest_framework import generics, permissions, filters
 from .models import Book
 from .serializers import BookSerializer
 
 class BookListView(generics.ListCreateAPIView):
+    """
+    BookListView
+    - Handles listing all books and creating new books.
+    - Uses ListCreateAPIView for GET (list) and POST (create).
+    - No authentication required for listing; creation may require authentication if permission_classes set.
+    """
     queryset = Book.objects.all()
     serializer_class = BookSerializer
 class BookDetailView(generics.RetrieveAPIView):
+    """
+    BookDetailView
+    - Handles retrieving a single book by its primary key (pk).
+    - Uses RetrieveAPIView for GET (detail).
+    """
     queryset = Book.objects.all()
     serializer_class = BookSerializer
 class BookCreateView(generics.CreateAPIView):
+    """
+    BookCreateView
+    - Handles creation of new Book instances.
+    - Only authenticated users can create books (permission_classes).
+    - Supports filtering and searching by title and author.
+    - Custom hook: perform_create for additional validation or logic before saving.
+    """
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    # Only authenticated users can create books
-    permission_classes = [IsAuthenticated]
-    # Enable filtering by title and author
+    permission_classes = [permissions.IsAuthenticated]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = ['title', 'author']
     search_fields = ['title', 'author__name']
@@ -26,11 +41,16 @@ class BookCreateView(generics.CreateAPIView):
         serializer.save()
 
 class BookUpdateView(generics.UpdateAPIView):
+    """
+    BookUpdateView
+    - Handles updating Book instances.
+    - Only authenticated users can update books (permission_classes).
+    - Supports filtering and searching by title and author.
+    - Custom hook: perform_update for additional validation or logic before saving.
+    """
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    # Only authenticated users can update books
-    permission_classes = [IsAuthenticated]
-    # Enable filtering and searching
+    permission_classes = [permissions.IsAuthenticated]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = ['title', 'author']
     search_fields = ['title', 'author__name']
@@ -41,6 +61,11 @@ class BookUpdateView(generics.UpdateAPIView):
         serializer.save()
 
 class BookDeleteView(generics.DestroyAPIView):
+    """
+    BookDeleteView
+    - Handles deletion of Book instances.
+    - Only authenticated users can delete books (permission_classes).
+    """
     queryset = Book.objects.all()
     serializer_class = BookSerializer
         
