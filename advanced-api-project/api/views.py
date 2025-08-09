@@ -12,6 +12,10 @@ class BookListView(generics.ListCreateAPIView):
     """
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+    # Enable filtering by title, author, and publication_year
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['title', 'author', 'publication_year']
+
 class BookDetailView(generics.RetrieveAPIView):
     """
     BookDetailView
@@ -20,6 +24,8 @@ class BookDetailView(generics.RetrieveAPIView):
     """
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['title', 'author', 'published_date']
 class BookCreateView(generics.CreateAPIView):
     """
     BookCreateView
@@ -51,6 +57,7 @@ class BookUpdateView(generics.UpdateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [permissions.IsAuthenticated]
+
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = ['title', 'author']
     search_fields = ['title', 'author__name']
