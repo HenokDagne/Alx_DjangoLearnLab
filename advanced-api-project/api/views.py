@@ -1,5 +1,5 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import permissions, filters
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated, filters
 from rest_framework import generics
 from .models import Book
 from .serializers import BookSerializer
@@ -14,7 +14,7 @@ class BookCreateView(generics.CreateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     # Only authenticated users can create books
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     # Enable filtering by title and author
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = ['title', 'author']
@@ -29,7 +29,7 @@ class BookUpdateView(generics.UpdateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     # Only authenticated users can update books
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     # Enable filtering and searching
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = ['title', 'author']
