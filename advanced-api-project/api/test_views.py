@@ -1,4 +1,28 @@
 
+
+# ---------------------------------------------
+# Testing Strategy for Book API Endpoints
+# ---------------------------------------------
+#
+# This test suite uses Django's built-in test framework (unittest-based)
+# and Django REST Framework's APITestCase to simulate API requests.
+#
+# Key areas tested:
+# - CRUD operations for Book endpoints (create, update, delete, list)
+# - Filtering, searching, and ordering (add tests as needed)
+# - Permissions and authentication enforcement
+#
+# How to run tests:
+# 1. Open a terminal in your project directory.
+# 2. Run: python manage.py test
+# 3. Django will use a separate test database and show results for each test case.
+#
+# Interpreting results:
+# - Each test method checks status codes and response data for correctness.
+# - Failures will show the expected vs. actual result for easy debugging.
+# - All tests should pass for a healthy API implementation.
+# ---------------------------------------------
+
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase

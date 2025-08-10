@@ -1,3 +1,27 @@
+## Testing Strategy and Guidelines
+
+This project uses Django's built-in test framework and Django REST Framework's APITestCase to ensure API reliability and correctness.
+
+### What is Tested?
+- CRUD operations for Book endpoints (create, update, delete, list)
+- Filtering, searching, and ordering
+- Permissions and authentication enforcement
+
+### How to Run Tests
+1. Open a terminal in your project directory.
+2. Run:
+	```
+	python manage.py test
+	```
+3. Django will use a separate test database and show results for each test case.
+
+### Interpreting Results
+- Each test checks status codes and response data for correctness.
+- Failures will show the expected vs. actual result for easy debugging.
+- All tests should pass for a healthy API implementation.
+
+### Where to Find Test Code
+- See `api/test_views.py` for all test cases and documentation.
 # API View Documentation for advanced_api_project
 
 This project uses Django REST Framework generic views and mixins to efficiently handle CRUD operations for the Book model. Below is an overview of each view and its configuration:
