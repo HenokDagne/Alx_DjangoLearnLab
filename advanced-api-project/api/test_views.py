@@ -42,7 +42,7 @@ class BookAPITestCase(APITestCase):
 		self.book2 = Book.objects.create(title='Book Two', publication_year=2021, author=self.author)
 
 	def test_create_book(self):
-		self.client.force_authenticate(user=self.user)
+		self.client.login(username='testuser', password='testpass')
 		url = reverse('book-create')
 		data = {
 			'title': 'Book Three',
@@ -55,7 +55,7 @@ class BookAPITestCase(APITestCase):
 		self.assertEqual(response.data['publication_year'], 2022)
 
 	def test_update_book(self):
-		self.client.force_authenticate(user=self.user)
+		self.client.login(username='testuser', password='testpass')
 		url = reverse('book-update', args=[self.book1.id])
 		data = {
 			'title': 'Book One Updated',
@@ -68,7 +68,7 @@ class BookAPITestCase(APITestCase):
 		self.assertEqual(self.book1.title, 'Book One Updated')
 
 	def test_delete_book(self):
-		self.client.force_authenticate(user=self.user)
+		self.client.login(username='testuser', password='testpass')
 		url = reverse('book-delete', args=[self.book2.id])
 		response = self.client.delete(url)
 		self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
