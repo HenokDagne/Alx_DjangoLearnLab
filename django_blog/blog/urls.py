@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import SignUpView, ProfileView, ProfileUpdateView, PostListView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView, CommentUpdateView, CommentDeleteView, CommentCreateView
+from .views import SignUpView, ProfileView, ProfileUpdateView, PostListView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView, CommentUpdateView, CommentDeleteView, CommentCreateView, PostSearchView
 from django.contrib.auth.views import LoginView, LogoutView
 
 urlpatterns = [
@@ -19,6 +19,7 @@ urlpatterns = [
     ,
     # CRUD URLs for Post
     path('posts/', PostListView.as_view(), name='post-list'),
+    path('posts/search/', PostSearchView.as_view(), name='post-search'),
     path('posts/new/', PostCreateView.as_view(), name='post-create'),
     path('posts/<int:pk>/', PostDetailView.as_view(), name='post-detail'),
     path('posts/<int:post_pk>/comments/new/', CommentCreateView.as_view(), name='comment-create'),

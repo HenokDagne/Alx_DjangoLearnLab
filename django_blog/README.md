@@ -3,6 +3,7 @@
 This project implements a simple blog application using Django, supporting full CRUD (Create, Read, Update, Delete) operations for blog posts.
 
 
+
 ## Features
 
 - **List Posts**: View all blog posts at `/posts/`.
@@ -10,6 +11,17 @@ This project implements a simple blog application using Django, supporting full 
 - **Create Post**: Authenticated users can create new posts at `/posts/new/`.
 - **Edit Post**: Only the author of a post can edit it at `/posts/<int:pk>/edit/`.
 - **Delete Post**: Only the author of a post can delete it at `/posts/<int:pk>/delete/`.
+
+### Tagging System
+
+- **Add Tags to Posts**: When creating or editing a post, use the "Tags" field to enter a comma-separated list of tags (e.g., `django, blog, python`). New tags will be created automatically if they do not exist.
+- **View Tags**: Tags are displayed with each post in the list and detail views. Clicking a tag filters posts by that tag.
+
+### Search Functionality
+
+- **Search Bar**: Use the search bar at the top of the post list or search results page to find posts by title, content, or tags.
+- **Tag Filtering**: Click any tag to view all posts associated with that tag.
+- **Search Results**: Matching posts are displayed on the search results page, showing relevant titles, content snippets, and tags.
 
 ### Comment System
 

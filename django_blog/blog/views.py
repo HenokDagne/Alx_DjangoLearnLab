@@ -26,11 +26,35 @@ class ProfileUpdateView(UpdateView, LoginRequiredMixin):
     def get_object(self):
         return self.request.user
 
+
 # CRUD Views for Post
 class PostListView(ListView):
     model = Post
     template_name = 'blog/post_list.html'
     context_object_name = 'posts'
+
+from django.db.models import Q
+
+class PostSearchView(ListView):
+    model = Post
+    template_name = 'blog/post_list.html'
+    context_object_name = 'posts'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        query = self.request.GET.get('q', '')
+        if query:
+            queryset = queryset.filter(
+                Q(title__icontains=query) |
+                Q(content__icontains=query) |
+                Q(tags__name__icontains=query)
+            ).distinct()
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search_query'] = self.request.GET.get('q', '')
+        return context
 
 
 from django.shortcuts import redirect
@@ -59,7 +83,22 @@ class PostDetailView(DetailView):
         context = self.get_context_data()
         context['comment_form'] = form
         return self.render_to_response(context)
-# ...existing code...
+
+class CommentCreateView(LoginRequiredMixin, CreateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = 'blog/comment_form.html'
+
+    def form_valid(self, form):
+        post_pk = self.kwargs.get('post_pk')
+        post = Post.objects.get(pk=post_pk)
+        form.instance.post = post
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        post_pk = self.kwargs.get('post_pk')
+        return f"/posts/{post_pk}/"
 
 class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Comment

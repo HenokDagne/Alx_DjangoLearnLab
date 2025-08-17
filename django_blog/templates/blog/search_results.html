@@ -1,5 +1,5 @@
 {% extends 'blog/base.html' %} {% block content %}
-<h1>All Blog Posts</h1>
+<h1>Search Results</h1>
 <form method="get" action="{% url 'post-search' %}" style="margin-bottom: 1em">
   <input
     type="text"
@@ -9,7 +9,7 @@
   />
   <button type="submit" class="btn btn-info">Search</button>
 </form>
-<a href="{% url 'post-create' %}" class="btn btn-primary">Create New Post</a>
+<a href="{% url 'post-list' %}" class="btn btn-secondary">Back to All Posts</a>
 <ul>
   {% for post in posts %}
   <li>
@@ -27,7 +27,7 @@
     {% endfor %} {% endif %}
   </li>
   {% empty %}
-  <li>No posts available.</li>
+  <li>No posts match your search.</li>
   {% endfor %}
 </ul>
 {% endblock %}
