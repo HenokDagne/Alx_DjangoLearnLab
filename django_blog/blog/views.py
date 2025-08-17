@@ -1,20 +1,25 @@
-from django.views.generic import CreateView, TemplateView, UpdateView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse_lazy
 from .forms import CustomUserCreationForm, ProfileUpdateForm
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import TemplateView
+from django.urls import reverse_lazy
+from django.views.generic import CreateView
+from django.views.generic.edit import UpdateView  
+from .models import User
 
-class RegisterView(CreateView):
+class SignUpView(CreateView):
     form_class = CustomUserCreationForm
-    template_name = 'register.html'
-    success_url = reverse_lazy('profile')
-
-class ProfileView(LoginRequiredMixin, TemplateView):
-    template_name = 'profile.html'
-
-class ProfileUpdateView(LoginRequiredMixin, UpdateView):
+    success_url = reverse_lazy('login')
+    template_name = 'registration/signup.html'
+    
+class ProfileView(TemplateView):
+    template_name = 'accounts/profile.html'
+    
+class ProfileUpdateView(UpdateView, LoginRequiredMixin):
+    model = User
     form_class = ProfileUpdateForm
-    template_name = 'profile_update.html'
     success_url = reverse_lazy('profile')
-
+    template_name = 'accounts/profile_update.html'
+    
     def get_object(self):
         return self.request.user
+    

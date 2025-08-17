@@ -1,0 +1,21 @@
+{% extends 'blog/base.html' %} 
+{% block title %}Profile{% endblock %} 
+
+{% block content %} 
+   {% if user.is_authenticated %}
+   <div id="profile_div">
+        <h2>Profile details</h2>
+        <p>Username: {{ user.username }}</p>
+        <p>Email: {{ user.email }}</p>
+        <p>Bio: {{ user.bio }}</p>
+
+        <a href="{% url 'profile_update' %}">Edit profile</a>  </div>
+        <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Log Out</button>
+        </form>
+  
+    {% else %} You are not logged in.
+    <a href="{% url 'login' %}">Click here to log in.</a>
+    {% endif %}
+{% endblock %}
