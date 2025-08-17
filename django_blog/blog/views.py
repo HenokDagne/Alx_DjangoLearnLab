@@ -9,7 +9,7 @@ class ProfileView(LoginRequiredMixin, TemplateView):
 
 class RegisterView(CreateView):
     form_class = CustomUserCreationForm
-    template_name = 'registration/register.html'
+    template_name = 'registration/signup.html'
     success_url = reverse_lazy('profile')
 
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
