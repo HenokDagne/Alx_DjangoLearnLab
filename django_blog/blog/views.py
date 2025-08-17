@@ -4,17 +4,17 @@ from django.views.generic import TemplateView
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.views.generic.edit import UpdateView  
-from django.contrib.auth.models import User
+from .models import User
 
 class SignUpView(CreateView):
     form_class = CustomUserCreationForm
     success_url = reverse_lazy('login')
     template_name = 'registration/signup.html'
     
-class ProfileView(LoginRequiredMixin, TemplateView):
+class ProfileView(TemplateView):
     template_name = 'accounts/profile.html'
     
-class ProfileUpdateView(LoginRequiredMixin, UpdateView):
+class ProfileUpdateView(UpdateView, LoginRequiredMixin):
     model = User
     form_class = ProfileUpdateForm
     success_url = reverse_lazy('profile')
@@ -22,3 +22,4 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     
     def get_object(self):
         return self.request.user
+    
