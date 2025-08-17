@@ -2,6 +2,7 @@
 
 This project implements a simple blog application using Django, supporting full CRUD (Create, Read, Update, Delete) operations for blog posts.
 
+
 ## Features
 
 - **List Posts**: View all blog posts at `/posts/`.
@@ -9,6 +10,27 @@ This project implements a simple blog application using Django, supporting full 
 - **Create Post**: Authenticated users can create new posts at `/posts/new/`.
 - **Edit Post**: Only the author of a post can edit it at `/posts/<int:pk>/edit/`.
 - **Delete Post**: Only the author of a post can delete it at `/posts/<int:pk>/delete/`.
+
+### Comment System
+
+- **Add Comment**: Authenticated users can add comments to any blog post directly from the post detail page. Use the form at the bottom of the post detail view.
+- **Edit Comment**: Only the author of a comment can edit their comment using `/posts/<post_id>/comments/<comment_id>/edit/`.
+- **Delete Comment**: Only the author of a comment can delete their comment using `/posts/<post_id>/comments/<comment_id>/delete/`.
+- **Comment Visibility**: All comments for a post are visible to any user viewing the post detail page.
+- **Permissions**:
+   - Only authenticated users can add comments.
+   - Only the comment author can edit or delete their own comments.
+   - Unauthorized users attempting to edit or delete comments will receive a 403 Forbidden response.
+
+### Comment Data Handling
+
+- The `Comment` model includes `post`, `author`, `content`, `created_at`, and `updated_at` fields.
+- The author is automatically set to the logged-in user when creating a comment.
+
+### Comment Navigation
+
+- The post detail template displays all comments and provides edit/delete links for the comment author.
+- The comment form is shown only to authenticated users.
 
 ## Permissions
 

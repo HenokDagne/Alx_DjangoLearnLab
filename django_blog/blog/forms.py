@@ -13,9 +13,22 @@ class ProfileUpdateForm(forms.ModelForm):
         fields = ["email", "bio"]
 
 
+
 # Form for Post model
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['title', 'content']
+
+# Form for Comment model
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Post.comments.rel.related_model
+        fields = ['content']
+
+    def clean_content(self):
+        content = self.cleaned_data.get('content')
+        if not content or not content.strip():
+            raise forms.ValidationError('Comment cannot be empty.')
+        return content
         
