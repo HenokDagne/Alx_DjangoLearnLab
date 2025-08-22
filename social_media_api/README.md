@@ -61,7 +61,67 @@ Headers: Authorization: Token <your_token>
 ]
 ```
 
-### Posts
+
+## Like/Unlike Endpoints
+
+### Like a Post
+
+**Request:**
+```http
+POST /posts/<post_id>/like/
+Headers: Authorization: Token <your_token>
+```
+**Response:**
+```json
+{
+	"message": "Post liked successfully!"
+}
+```
+
+### Unlike a Post
+
+**Request:**
+```http
+POST /posts/<post_id>/unlike/
+Headers: Authorization: Token <your_token>
+```
+**Response:**
+```json
+{
+	"message": "Post unliked successfully!"
+}
+```
+
+## Notifications Endpoint
+
+Notifications are generated for actions such as:
+- Getting a new follower
+- Someone liking your post
+- Someone commenting on your post
+
+### Get Notifications
+
+**Request:**
+```http
+GET /notifications/
+Headers: Authorization: Token <your_token>
+```
+**Response:**
+```json
+{
+	"unread_count": 2,
+	"notifications": [
+		{
+			"id": 1,
+			"actor_username": "other_user",
+			"verb": "liked your post",
+			"timestamp": "2025-08-21T12:00:00Z",
+			"is_read": false
+		},
+		...
+	]
+}
+```
 
 **List Posts**
 ```
