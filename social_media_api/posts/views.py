@@ -35,7 +35,7 @@ class CommentViewSet(viewsets.ModelViewSet):
         serializer.save(author=self.request.user)
 
 
-
+from rest_framework.permissions import IsAuthenticated
 class FeedView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
