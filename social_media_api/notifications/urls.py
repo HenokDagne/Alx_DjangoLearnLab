@@ -1,5 +1,6 @@
 from django.urls import path
+from .views import NotificationListView
 
 urlpatterns = [
-	# Add your notification-related URL patterns here
+	path('notifications/', NotificationListView.as_view(), name='notifications-list'),
 ]
