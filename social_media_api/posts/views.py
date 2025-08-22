@@ -77,8 +77,8 @@ from rest_framework import generics
 class LikePostView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
-    def post(self, request, post_id):
-        post = generics.get_object_or_404(Post, pk=post_id)
+    def post(self, request, pk):
+        post = generics.get_object_or_404(Post, pk=pk)
         like, created = Like.objects.get_or_create(user=request.user, post=post)
         if not created:
             return Response({"message": "You have already liked this post."}, status=status.HTTP_400_BAD_REQUEST)
@@ -97,8 +97,8 @@ class LikePostView(generics.GenericAPIView):
 class UnlikePostView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
-    def post(self, request, post_id):
-        post = generics.get_object_or_404(Post, pk=post_id)
+    def post(self, request, pk):
+        post = generics.get_object_or_404(Post, pk=pk)
         like = Like.objects.filter(user=request.user, post=post).first()
         if not like:
             return Response({"message": "You have not liked this post."}, status=status.HTTP_400_BAD_REQUEST)
