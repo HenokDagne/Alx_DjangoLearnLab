@@ -1,4 +1,65 @@
-## API Endpoints Documentation
+# API Endpoints Documentation
+
+## User Model Changes
+
+The `CustomUser` model extends Django's `AbstractUser` and adds:
+- `bio`: Text field for user biography
+- `profile_picture`: Image field for user profile picture
+- `followers`: ManyToManyField referencing itself (symmetrical=False)
+- `following`: ManyToManyField referencing itself (symmetrical=False)
+
+## Follow/Unfollow Endpoints
+
+### Follow a User
+
+**Request:**
+```http
+POST /accounts/follow/<user_id>/
+Headers: Authorization: Token <your_token>
+```
+**Response:**
+```json
+{
+	"detail": "You are now following <username>"
+}
+```
+
+### Unfollow a User
+
+**Request:**
+```http
+DELETE /accounts/unfollow/<user_id>/
+Headers: Authorization: Token <your_token>
+```
+**Response:**
+```json
+{
+	"detail": "You have unfollowed <username>"
+}
+```
+
+## Feed Endpoint
+
+### Get Feed
+
+**Request:**
+```http
+GET /posts/feed/
+Headers: Authorization: Token <your_token>
+```
+**Response:**
+```json
+[
+	{
+		"id": 1,
+		"author": "followed_user",
+		"content": "Post from followed user",
+		"created_at": "2025-08-21T12:00:00Z",
+		"updated_at": "2025-08-21T12:00:00Z"
+	},
+	...
+]
+```
 
 ### Posts
 
