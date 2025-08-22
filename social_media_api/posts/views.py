@@ -1,6 +1,6 @@
+from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import render
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
 from .models import Post, Comment
 from .serializers import PostSerializer, CommentSerializer
 from .filter import CommentFilter, PostFilter  # Add this import if CommentFilter is defined in filters.py
@@ -35,7 +35,6 @@ class CommentViewSet(viewsets.ModelViewSet):
         serializer.save(author=self.request.user)
 
 
-from rest_framework.permissions import IsAuthenticated
 class FeedView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
