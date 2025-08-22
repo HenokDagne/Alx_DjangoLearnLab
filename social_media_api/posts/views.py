@@ -6,6 +6,8 @@ from .serializers import PostSerializer, CommentSerializer
 from .filter import CommentFilter, PostFilter  # Add this import if CommentFilter is defined in filters.py
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
+from rest_framework import generics
+from rest_framework.response import Response
 # Create your views here.
 
 
@@ -31,3 +33,17 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
+
+
+
+class FeedView(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get_queryset(self):
+        # Get users that the current user is following
+        following = self.request.user.following.all()
+        # get posts from those users, ordered by created_date (most recent first)
+        posts = Post.objects.filter(author__in=following).order_by('-created_at')
+        serializer = PostSerializer(posts, many=True) 
+        return Response(serializer.data)
+    
