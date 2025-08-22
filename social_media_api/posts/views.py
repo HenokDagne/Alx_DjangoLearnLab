@@ -1,13 +1,19 @@
 from rest_framework.permissions import IsAuthenticated, permissions
 from django.shortcuts import render
 from rest_framework import viewsets
-from .models import Post, Comment
+from .models import Post, Comment, Like
 from .serializers import PostSerializer, CommentSerializer
 from .filter import CommentFilter, PostFilter  # Add this import if CommentFilter is defined in filters.py
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework import generics
 from rest_framework.response import Response
+from rest_framework.views import APIView
+from django.shortcuts import get_object_or_404
+from notifications.models import Notification
+from django.utils import timezone
+from django.contrib.contenttypes.models import ContentType
+from notifications.views import create_notification
 # Create your views here.
 
 
@@ -28,11 +34,30 @@ class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
     permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_class = PostFilter
+    filterset_class = CommentFilter
     search_fields = ['content', 'author__username']
 
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+        comment = serializer.save(author=self.request.user)
+        post = comment.post
+        if post.author != self.request.user:
+            create_notification(
+                recipient=post.author,
+                actor=self.request.user,
+                verb="commented on your post",
+                target=comment
+            )
+
+    def perform_update(self, serializer):
+        comment = serializer.save()
+        post = comment.post
+        if post.author != self.request.user:
+            create_notification(
+                recipient=post.author,
+                actor=self.request.user,
+                verb="updated a comment on your post",
+                target=comment
+            )
 
 
 class FeedView(generics.ListAPIView):
@@ -45,4 +70,44 @@ class FeedView(generics.ListAPIView):
         posts = Post.objects.filter(author__in=following_users).order_by('-created_at')
         serializer = PostSerializer(posts, many=True)
         return Response(serializer.data)
+
+class LikePostView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, post_id):
+        post = get_object_or_404(Post, id=post_id)
+        if Like.objects.filter(post=post, user=request.user).exists():
+            return Response({"messeage: " "your have already liked this post"})
+
+        Like.objects.create(post=post, user=request.user)
+
+        if post.author != request.user:
+            create_notification(
+                recipient=post.author,
+                actor=request.user,
+                verb="liked your post",
+                target=post
+            )
+
+        return Response({"message": "Post liked successfully!"})
+    
+
+class UnlikePostView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def Post(self, request, post_id):
+        post = get_object_or_404(Post, id=post_id)
+        if Like.objects.filter(post=post, user=request.user).exists():
+            Like.objects.filter(post=post, user=request.user).delete()
+            if post.author != request.user:
+                create_notification(
+                    recipient=post.author,
+                    actor=request.user,
+                    verb="unliked your post",
+                    target=post,
+                    is_read=True
+                )
+
+        return Response({"message": "Post unliked successfully!"})
+
     

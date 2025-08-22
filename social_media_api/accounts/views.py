@@ -8,6 +8,7 @@ from .serializers import RegisterSerializer, LoginSerializer, ProfileSerializer
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from django.shortcuts import get_object_or_404
+from notifications.views import create_notification
 
 
 
@@ -55,6 +56,13 @@ class FollowUserView(generics.GenericAPIView):
             return Response({"detail": "You cannot follow yourself"}, status=status.HTTP_400_BAD_REQUEST)
         request.user.following.add(target_user)
         target_user.followers.add(request.user)
+        create_notification(
+            recipient=target_user,
+            actor=request.user,
+            verb="started following you",
+            target=request.user,
+            is_read=True
+        )
         return Response({"detail": f"You are now following {target_user.username}"}, status=status.HTTP_200_OK)
 
 class UnfollowUserView(generics.GenericAPIView):
@@ -66,4 +74,11 @@ class UnfollowUserView(generics.GenericAPIView):
             return Response({"detail": "You cannot unfollow yourself"}, status=status.HTTP_400_BAD_REQUEST)
         request.user.following.remove(target_user)
         target_user.followers.remove(request.user)
+        create_notification(
+            recipient=target_user,
+            actor=request.user,
+            verb="stopped following you",
+            target=request.user,
+            is_read=True
+        )
         return Response({"detail": f"You have unfollowed {target_user.username}"}, status=status.HTTP_200_OK)

@@ -14,3 +14,4 @@ class Notification(models.Model):
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     target = GenericForeignKey('content_type', 'object_id')
+    is_read = models.BooleanField(default=False)
